@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import { std, mean, median, mode } from "mathjs";
+import { useDispatch, useSelector } from "react-redux";
+import { getNumbers } from "../../actions/numbersActions";
 
 const Dashboard = () => {
   const [arrNumbers, setArrNumbers] = useState(null);
+  const storeNumbers = useSelector((state) => state);
+  const dispatch = useDispatch();
 
   /*    I have written mathematical operations in functions, 
         but I prefer to use the library "mathjs" with ready-made solutions 
@@ -55,29 +59,18 @@ const Dashboard = () => {
   //     return modes;
   //   };
 
-  function get42() {
-    setArrNumbers((prev) => [...prev, 42]);
-  }
+  useEffect(() => {
+    dispatch(getNumbers(1234));
+  }, [dispatch]);
 
   useEffect(() => {
-    fetch("http://localhost:3005/1234", {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data, "serv data");
-        setArrNumbers(data.data);
-      })
-      .catch((err) => console.log("Error: " + err));
-  }, []);
+    if (storeNumbers.length) {
+      setArrNumbers(storeNumbers);
+    }
+  }, [storeNumbers]);
 
   return (
     <>
-      <br />
-      <button onClick={get42}>42</button>
       <p> Mean - {arrNumbers && mean(arrNumbers).toFixed(6)} </p>
       <p> Median - {arrNumbers && median(arrNumbers).toFixed(6)} </p>
       <p> Standard Deviation - {arrNumbers && std(arrNumbers).toFixed(6)} </p>
