@@ -1,12 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { std, mean, median, mode } from "mathjs";
 import { useDispatch, useSelector } from "react-redux";
 import { getNumbers } from "../../actions/numbersActions";
+import { Grid } from "@material-ui/core";
+import { Box } from "@mui/system";
 
 const Dashboard = () => {
-  const [arrNumbers, setArrNumbers] = useState(null);
   const storeNumbers = useSelector((state) => state);
   const dispatch = useDispatch();
+  var result = [
+    {
+      name: "Mean",
+      value: storeNumbers?.length && mean(storeNumbers).toFixed(6),
+    },
+    {
+      name: "Median",
+      value: storeNumbers?.length && median(storeNumbers).toFixed(6),
+    },
+    {
+      name: "Standard",
+      value: storeNumbers?.length && std(storeNumbers).toFixed(6),
+    },
+    {
+      name: "Mode",
+      value: storeNumbers?.length && mode(storeNumbers)[0].toFixed(6),
+    },
+  ];
+
+  console.log(result);
 
   /*    I have written mathematical operations in functions, 
         but I prefer to use the library "mathjs" with ready-made solutions 
@@ -63,18 +84,20 @@ const Dashboard = () => {
     dispatch(getNumbers(1234));
   }, [dispatch]);
 
-  useEffect(() => {
-    if (storeNumbers.length) {
-      setArrNumbers(storeNumbers);
-    }
-  }, [storeNumbers]);
-
   return (
     <>
-      <p> Mean - {arrNumbers && mean(arrNumbers).toFixed(6)} </p>
-      <p> Median - {arrNumbers && median(arrNumbers).toFixed(6)} </p>
-      <p> Standard Deviation - {arrNumbers && std(arrNumbers).toFixed(6)} </p>
-      <p> Mode - {arrNumbers && mode(arrNumbers)[0].toFixed(6)} </p>
+      <Grid container direction="column">
+        {storeNumbers?.length &&
+          result.map((el) => (
+            <>
+              <Grid direction="row" container>
+                <Box sx={{ border: 1, width: 100, p: 1 }}>{el.name}</Box>
+                <Box sx={{ border: 1, width: 100, p: 1 }}>{el.value}</Box>
+              </Grid>
+            </>
+          ))}
+      </Grid>
+
       {/* 
       <h3> You can check the functions here </h3>
       <hr />

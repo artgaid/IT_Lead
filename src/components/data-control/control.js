@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addInStore, getNumbers } from "../../actions/numbersActions";
+import { Box } from "@mui/system";
+import Button from "@mui/material/Button";
+import { Input, Typography } from "@mui/material";
 
 const DataControl = () => {
   const dispatch = useDispatch();
@@ -25,19 +28,28 @@ const DataControl = () => {
   };
 
   return (
-    <div>
-      <button onClick={updateHandle}>Update</button>
-      <form onSubmit={addHandle}>
-        <input
-          type="number"
-          value={number}
-          onChange={(e) => setNumber(e.target.value)}
-          placeholder="Enter the number"
-        ></input>
-        <button type="submit">Enter</button>
-      </form>
-      <h3>File name: {fileName}</h3>
-    </div>
+    <>
+      <Box>
+        <form onSubmit={addHandle}>
+          <Input
+            sx={{ p: 1 }}
+            type="number"
+            value={number}
+            onChange={(e) => setNumber(e.target.value)}
+            placeholder="Enter the number"
+          ></Input>
+          <Button sx={{ ml: 1, p: 1 }} variant="outlined" type="submit">
+            Enter
+          </Button>
+          <Box display="flex">
+            <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="h3">
+              File name: {fileName}
+            </Typography>
+            <Button onClick={updateHandle}>Update</Button>
+          </Box>
+        </form>
+      </Box>
+    </>
   );
 };
 
